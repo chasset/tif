@@ -39,13 +39,11 @@ to resume-all-tests
   ifelse (success = nbr)
     [ output-print (word "All tests (" nbr ") passed. Congratulations.") ]
     [ output-print (word "Tests finished with errors: " fails "/" nbr " tests failed!") ]
-  output-print "Please cite this library in your publications as:"
-  output-print "Chasset P.O. (2013). Unit testing for the simulation software NetLogo. Software, http://flow.chasset.net/netlogo-testthat/"
 end
 
 to-report expect-that0 [ v1 mode ]
   set nbr nbr + 1
-  seit current-nbr current-nbr + 1
+  set current-nbr current-nbr + 1
   if (1 = item 0 mode) [ report expect-true v1 ]
   if (2 = item 0 mode) [ report expect-false v1 ]
   if (3 = item 0 mode) [ report expect-equal v1 item 1 mode ]
