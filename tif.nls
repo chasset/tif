@@ -1,0 +1,109 @@
+;===============================================================================
+; TIF (Testing is fun): Unit tests for the simulation software NetLogo.
+; Copyright (C) 2013 Pierre-Olivier Chasset
+; http://flow.chasset.net/netlogo-tif/
+;
+; This program is free software: you can redistribute it and/or modify
+; it under the terms of the GNU Affero General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; This program is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU Affero General Public License for more details.
+;
+; You should have received a copy of the GNU Affero General Public License
+; along with this program. If not, see <http://www.gnu.org/licenses/>.
+;===============================================================================
+
+globals [ nbr current-nbr success fails current-test-unit ]
+
+to initialize-tests
+  set nbr 0
+  set current-nbr 0
+  set success 0
+  set fails 0
+end
+
+to set-context [ m ]  output-print m  end
+to test-that [ m ]  set current-nbr 0  set current-test-unit m  end
+
+to expect-that [ v1 mode ]
+  let message expect-that0 v1 mode
+  if (message != "") [ output-print (word "  **FAILS** " current-test-unit ", " message) ]
+end
+
+to resume-all-tests
+  output-print ""
+  ifelse (success = nbr)
+    [ output-print (word "All tests (" nbr ") passed. Congratulations.") ]
+    [ output-print (word "Tests finished with errors: " fails "/" nbr " tests failed!") ]
+  output-print "Please cite this library in your publications as:"
+  output-print "Chasset P.O. (2013). Unit testing for the simulation software NetLogo. Software, http://flow.chasset.net/netlogo-testthat/"
+end
+
+to-report expect-that0 [ v1 mode ]
+  set nbr nbr + 1
+  seit current-nbr current-nbr + 1
+  if (1 = item 0 mode) [ report expect-true v1 ]
+  if (2 = item 0 mode) [ report expect-false v1 ]
+  if (3 = item 0 mode) [ report expect-equal v1 item 1 mode ]
+  if (4 = item 0 mode) [ report expect-identical v1 item 1 mode ]
+end
+
+to-report expect-true [ v1 ]
+  ifelse (v1 = true) [
+    set success success + 1
+    report "" 
+  ] [
+    set fails fails + 1
+    report failed ifelse-value (v1 = false)
+      [ (word "expected true, got false instead.") ]
+      [ (word "expected a boolean, got " v1 " instead.") ]
+  ]
+end
+
+to-report expect-false [ v1 ]
+  ifelse (v1 = false) [
+    set success success + 1
+    report "" 
+  ] [
+    set fails fails + 1
+    report failed ifelse-value (v1 = true)
+      [ (word "expected false, got true instead.") ]
+      [ (word "expected a boolean, got " v1 " instead." ) ]
+  ]
+end
+
+to-report expect-equal [ v1 v2 ]
+  ifelse (is-number? v1 and is-number? v2 and v1 = v2) [
+    set success success + 1
+    report "" 
+  ] [
+    set fails fails + 1
+    if (is-number? v1 and is-number? v2) [
+      report failed (word "expected " v2 ", got " v1 " instead. The difference is " (v1 - v2) ".")
+    ]
+    if not is-number? v2 [ report failed word "Expect something that isn't a number: " v2 ]
+    if not is-number? v1 [ report failed word "Got something that isn't a number: " v1 ]
+    report failed (word "Wrong use of 'equals': use maybe 'is-identical' instead for non numbers comparison: " v1 " / " v2)
+  ]
+end
+
+to-report expect-identical [ v1 v2 ]
+  ifelse (v1 = v2) [
+    set success success + 1
+    report "" 
+  ] [
+    set fails fails + 1
+    report failed (word "expected " v2 " and got " v1 " instead.")
+  ]
+end
+
+
+to-report failed [ m ] report (word "test n°" current-nbr ": " m) end
+to-report is-true report (list 1) end
+to-report is-false report (list 2) end
+to-report equals [ v2 ] report (list 3 v2) end
+to-report is-identical-to [ v2 ] report (list 4 v2) end
