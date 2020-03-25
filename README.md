@@ -1,6 +1,8 @@
 TIF (Testing is fun): Unit tests for the simulation software NetLogo
 ====================================================================
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3726981.svg)](https://doi.org/10.5281/zenodo.3726981)
+
 ## Description
 
 TIF (tif.nls) is a library for the simulation software NetLogo [[1](http://ccl.northwestern.edu/netlogo/)] helping to write [unit tests](https://en.wikipedia.org/wiki/Unit_testing). Compared to the extension *Test* of NetLogo, this module is written in NetLogo and its usage is fun. It is largely inspired from the [testthat](https://github.com/hadley/test_that) package [2] for the statistical software R.
